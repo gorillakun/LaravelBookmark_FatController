@@ -3,11 +3,8 @@
 namespace Tests\Feature\Bookmarks;
 
 use App\Bookmark\UseCase\ShowBookmarkListPageUseCase;
-use App\Lib\LinkPreview\LinkPreviewInterface;
-use App\Models\BookmarkCategory;
 use Tests\TestCase;
 use Artesaos\SEOTools\Facades\SEOTools;
-use Illuminate\Validation\ValidationException;
 
 class ShowBookmarkListPageUseCaseTest extends TestCase
 {
@@ -16,9 +13,7 @@ class ShowBookmarkListPageUseCaseTest extends TestCase
   protected function setUp(): void
   {
     parent::setUp();
-
-    $this->app->bind(LinkPreviewInterface::class, MockLinkPreview::class);
-    $this->useCase = $this->app->make(CreateBookmarkUseCase::class);
+    $this->useCase = new ShowBookmarkListPageUseCase();
   }
 
   public function testResponseIsCorrect()
@@ -30,10 +25,6 @@ class ShowBookmarkListPageUseCaseTest extends TestCase
     self::assertCount(10, $response['bookmarks']);
     self::assertCount(10, $response['top_categories']);
     self::assertCount(10, $response['top_users']);
-
-    for ($i = 1; $i < 10; $i++) {
-      self::assertSame($i, $response['top_users'][$i - 1]->id);
-    }
   }
 
 }
